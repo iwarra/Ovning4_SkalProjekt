@@ -99,6 +99,7 @@ namespace SkalProj_Datastrukturer_Minne
                         break;
                 }
             }
+
         }
 
         /// <summary>
@@ -111,6 +112,32 @@ namespace SkalProj_Datastrukturer_Minne
              * Create a switch with cases to enqueue items or dequeue items
              * Make sure to look at the queue after Enqueueing and Dequeueing to see how it behaves
             */
+            Queue<string> peopleInLine = new Queue<string>();
+            while (true)
+            {
+            //ToDo: Add check to see if null
+            //Add switch case to return to main menu
+            string input = Console.ReadLine();
+                char nav = input[0];
+                string value = input.Substring(1);
+                switch (nav)
+                {
+                    case '+':
+                        peopleInLine.Enqueue(value);
+                        break;
+                    case '-':
+                        peopleInLine.Dequeue();
+                        break;
+                    default:
+                        Console.WriteLine("Please use only + or -");
+                        break;
+                }
+                foreach (string item in peopleInLine)
+                {
+                    Console.WriteLine(item);
+                    Console.WriteLine(peopleInLine.Peek());
+                }
+            }
         }
 
         /// <summary>
