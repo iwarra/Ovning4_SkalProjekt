@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 
 namespace SkalProj_Datastrukturer_Minne
 {
@@ -62,25 +63,9 @@ namespace SkalProj_Datastrukturer_Minne
         /// </summary>
         static void ExamineList()
         {
-            /*
-             * Loop this method untill the user inputs something to exit to main menue.
-             * Create a switch statement with cases '+' and '-'
-             * '+': Add the rest of the input to the list (The user could write +Adam and "Adam" would be added to the list)
-             * '-': Remove the rest of the input from the list (The user could write -Adam and "Adam" would be removed from the list)
-             * In both cases, look at the count and capacity of the list
-             * As a default case, tell them to use only + or -
-             * Below you can see some inspirational code to begin working.
-            */
 
-            //List<string> theList = new List<string>();
-            //string input = Console.ReadLine();
-            //char nav = input[0];
-            //string value = input.substring(1);
-
-            //switch(nav){...}
-
-            //ToDo: point 1 - Which condition stops the loop
-            //ToDo: point 1 - In both cases, look at the count and capacity of the list
+            //ToDo: Which condition stops the loop
+            //ToDo: In both cases, look at the count and capacity of the list
             List<string> theList = new List<string>();
             while (true)
             {
@@ -107,11 +92,6 @@ namespace SkalProj_Datastrukturer_Minne
         /// </summary>
         static void ExamineQueue()
         {
-            /*
-             * Loop this method untill the user inputs something to exit to main menue.
-             * Create a switch with cases to enqueue items or dequeue items
-             * Make sure to look at the queue after Enqueueing and Dequeueing to see how it behaves
-            */
             Queue<string> peopleInLine = new Queue<string>();
             while (true)
             {
@@ -132,9 +112,9 @@ namespace SkalProj_Datastrukturer_Minne
                         Console.WriteLine("Please use only + or -");
                         break;
                 }
-                foreach (string item in peopleInLine)
+                foreach (string p in peopleInLine)
                 {
-                    Console.WriteLine(item);
+                    Console.WriteLine(p);
                     Console.WriteLine(peopleInLine.Peek());
                 }
             }
@@ -150,6 +130,61 @@ namespace SkalProj_Datastrukturer_Minne
              * Create a switch with cases to push or pop items
              * Make sure to look at the stack after pushing and and poping to see how it behaves
             */
+            while (true) {
+                string input = Console.ReadLine();
+                char nav = input[0];
+                string value = input.Substring(1);
+                Stack<string> peopleInTheQueue = new Stack<string>();
+                switch (nav)
+                {
+                    case '+':
+                        peopleInTheQueue.Push(value);
+                        break;
+                    case '-':
+                       peopleInTheQueue.Pop();
+                        break;
+                    case '*':
+                        ReverseText(value);
+                        break;
+                    default:
+                        Console.WriteLine("Please use only + or -");
+                        break;
+                }
+                foreach (var item in peopleInTheQueue)
+                {
+                    Console.WriteLine(item);
+                    Console.WriteLine(peopleInTheQueue.Count());
+                }
+            }
+
+        }
+
+        static string ReverseText(string value)
+        {
+            Stack<char> letters = new Stack<char>();
+
+            while (value == null && value == " ") 
+            { 
+                Console.WriteLine("Please enter some input that you want reversed!");
+            }
+            
+            //Loop over the string to add each charachter into our stack
+            foreach (char c in value)
+            {
+                letters.Push(c);
+               // Console.WriteLine(c);
+               // Console.WriteLine(letters.Count);
+            }
+
+            string reversed = "";
+            //While there are letters left in our stack append them to the new reversed string; The order is reversed because of the use of Pop method
+            while (letters.Count > 0)
+            {
+                reversed += letters.Pop();
+            }
+            //Console.WriteLine(reversed);
+            //Console.WriteLine(letters.Count);
+            return reversed;
         }
 
         static void CheckParanthesis()
