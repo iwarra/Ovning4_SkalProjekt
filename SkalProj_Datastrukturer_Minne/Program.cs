@@ -81,9 +81,9 @@ namespace SkalProj_Datastrukturer_Minne
 
             //ToDo: point 1 - Which condition stops the loop
             //ToDo: point 1 - In both cases, look at the count and capacity of the list
+            List<string> theList = new List<string>();
             while (true)
             {
-                List<string> theList = new List<string>();
                 string input = Console.ReadLine();
                 char nav = input[0];
                 switch (nav)
