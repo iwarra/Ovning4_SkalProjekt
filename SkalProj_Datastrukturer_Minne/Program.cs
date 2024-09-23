@@ -189,6 +189,13 @@ namespace SkalProj_Datastrukturer_Minne
 
         static void CheckParanthesis()
         {
+            string input = Console.ReadLine();
+            //Create data structure with all kinds of parantheses
+            //Loop the input string and filter out any other characters
+            //Loop through the list of parentheses and compare first to last and make my way inwards
+            //As soon as not matched we return false
+            //Once we reached the middle if they all match we return true
+
             /*
              * Use this method to check if the paranthesis in a string is Correct or incorrect.
              * Example of correct: (()), {}, [({})],  List<int> list = new List<int>() { 1, 2, 3, 4 };
