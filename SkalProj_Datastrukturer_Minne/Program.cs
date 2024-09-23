@@ -78,6 +78,27 @@ namespace SkalProj_Datastrukturer_Minne
             //string value = input.substring(1);
 
             //switch(nav){...}
+
+            //ToDo: point 1 - Which condition stops the loop
+            //ToDo: point 1 - In both cases, look at the count and capacity of the list
+            while (true)
+            {
+                List<string> theList = new List<string>();
+                string input = Console.ReadLine();
+                char nav = input[0];
+                switch (nav)
+                {
+                    case '+':
+                        theList.Add(input.Substring(1));
+                        break;
+                    case '-':
+                        theList.Remove(input.Substring(1));
+                        break;
+                    default:
+                        Console.WriteLine("Please use only + or -");
+                        break;
+                }
+            }
         }
 
         /// <summary>
