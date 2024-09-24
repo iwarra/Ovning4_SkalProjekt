@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Threading.Channels;
 
 namespace SkalProj_Datastrukturer_Minne
 {
@@ -95,9 +96,9 @@ namespace SkalProj_Datastrukturer_Minne
             Queue<string> peopleInLine = new Queue<string>();
             while (true)
             {
-            //ToDo: Add check to see if null
-            //Add switch case to return to main menu
-            string input = Console.ReadLine();
+                //ToDo: Add check to see if null
+                //Add switch case to return to main menu
+                string input = Console.ReadLine();
                 char nav = input[0];
                 string value = input.Substring(1);
                 switch (nav)
@@ -141,7 +142,7 @@ namespace SkalProj_Datastrukturer_Minne
                         peopleInTheQueue.Push(value);
                         break;
                     case '-':
-                       peopleInTheQueue.Pop();
+                        peopleInTheQueue.Pop();
                         break;
                     case '*':
                         ReverseText(value);
@@ -163,17 +164,17 @@ namespace SkalProj_Datastrukturer_Minne
         {
             Stack<char> letters = new Stack<char>();
 
-            while (value == null && value == " ") 
-            { 
+            while (value == null && value == " ")
+            {
                 Console.WriteLine("Please enter some input that you want reversed!");
             }
-            
+
             //Loop over the string to add each charachter into our stack
             foreach (char c in value)
             {
                 letters.Push(c);
-               // Console.WriteLine(c);
-               // Console.WriteLine(letters.Count);
+                // Console.WriteLine(c);
+                // Console.WriteLine(letters.Count);
             }
 
             string reversed = "";
@@ -187,23 +188,53 @@ namespace SkalProj_Datastrukturer_Minne
             return reversed;
         }
 
-        static void CheckParanthesis()
+        //ToDo: Refactor / Implement a better solution with stack / try solving with recursion 
+        static bool CheckParanthesis()
         {
-            string input = Console.ReadLine();
             //Create data structure with all kinds of parantheses
-            //Loop the input string and filter out any other characters
             //Loop through the list of parentheses and compare first to last and make my way inwards
             //As soon as not matched we return false
             //Once we reached the middle if they all match we return true
 
-            /*
-             * Use this method to check if the paranthesis in a string is Correct or incorrect.
-             * Example of correct: (()), {}, [({})],  List<int> list = new List<int>() { 1, 2, 3, 4 };
-             * Example of incorrect: (()]), [), {[()}],  List<int> list = new List<int>() { 1, 2, 3, 4 );
-             */
+            Parentheses p = new Parentheses();
+            string input = Console.ReadLine();
+            //Loop the input string and filter out any other characters
+            string filtered = "";
+            foreach (char c in input) 
+            {
+                if (c == p.Round[0] || c == p.Round[1] || c == p.Curly[0] || c == p.Curly[1] || c == p.Square[0] || c == p.Square[1])  filtered += c;
+            }
 
+            if (filtered == null || filtered == "" || filtered.Length % 2 != 0) 
+            {
+                Console.WriteLine("Not a valid parentheses input");
+                return false;
+            };
+            bool isMatched = false;
+
+            for (int i = 0; i < filtered.Length/2; i++)
+            {             
+                switch (filtered[i])
+                {
+                    case '(':
+                        isMatched = filtered[filtered.Length - i - 1] == ')' ? true : false;
+                        if(!isMatched) return isMatched;
+                        break;
+                    case '[':
+                        isMatched = filtered[filtered.Length - i - 1] == ']' ? true : false;
+                        if (!isMatched) return isMatched;
+                        break;
+                    case '{':
+                        isMatched = filtered[filtered.Length - i - 1] == '}' ? true : false;
+                        if (!isMatched) return isMatched;
+                        break;
+                    default:
+                        isMatched = false;
+                        break;
+                }
+            }
+            return isMatched;
         }
-
     }
 }
 
