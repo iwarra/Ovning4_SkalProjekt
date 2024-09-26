@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Data;
 using System.Threading.Channels;
 
@@ -188,53 +189,71 @@ namespace SkalProj_Datastrukturer_Minne
             return reversed;
         }
 
-        //ToDo: Refactor / Implement a better solution with stack / try solving with recursion 
+        //ToDo: Refactor / Implement a better solution with a list / try solving with recursion 
         static bool CheckParanthesis()
         {
-            //Create data structure with all kinds of parantheses
-            //Loop through the list of parentheses and compare first to last and make my way inwards
-            //As soon as not matched we return false
-            //Once we reached the middle if they all match we return true
-
-            Parentheses p = new Parentheses();
-            string input = Console.ReadLine();
-            //Loop the input string and filter out any other characters
-            string filtered = "";
-            foreach (char c in input) 
+            Dictionary<string, char[]> p = new Dictionary<string, char[]>
             {
-                if (c == p.Round[0] || c == p.Round[1] || c == p.Curly[0] || c == p.Curly[1] || c == p.Square[0] || c == p.Square[1])  filtered += c;
+                { "Round", new char[] {'(', ')'} },
+                { "Curly", new char[] {'{', '}'} },
+                { "Square", new char[] {'[', ']'} }
+            };
+
+            //Dictionary p = new Dictionary<string, char[]>
+            //{
+            //    { "Round", new char[] {'(', ')'}},
+            //    { "Curly", new char[] {'{', '}'}},
+            //    { "Square", new char[] {'[', ']'}}
+            //};
+            //check for null
+            string input = Console.ReadLine();
+            
+            List<char> filtered = new List<char>();
+
+            foreach (char c in input)
+            {
+                if (c == p["Round"][0] || c == p["Round"][1] || c == p["Curly"][0] || c == p["Curly"][1] || c == p["Square"][0] || c == p["Square"][1]) filtered.Add(c);
             }
 
-            if (filtered == null || filtered == "" || filtered.Length % 2 != 0) 
+            if (filtered.Count == 0 || filtered.Count % 2 != 0)
             {
                 Console.WriteLine("Not a valid parentheses input");
                 return false;
             };
-            bool isMatched = false;
 
-            for (int i = 0; i < filtered.Length/2; i++)
-            {             
-                switch (filtered[i])
-                {
-                    case '(':
-                        isMatched = filtered[filtered.Length - i - 1] == ')' ? true : false;
-                        if(!isMatched) return isMatched;
-                        break;
-                    case '[':
-                        isMatched = filtered[filtered.Length - i - 1] == ']' ? true : false;
-                        if (!isMatched) return isMatched;
-                        break;
-                    case '{':
-                        isMatched = filtered[filtered.Length - i - 1] == '}' ? true : false;
-                        if (!isMatched) return isMatched;
-                        break;
-                    default:
-                        isMatched = false;
-                        break;
-                }
-            }
-            return isMatched;
+            var result = CheckFirstAndLast(filtered, p);
+            while (result.Count > 0)
+            {
+                Console.WriteLine("In the while loop.");
+                CheckFirstAndLast(result, p);
+                Console.WriteLine($"Result of calling the func: { CheckFirstAndLast(result, p)}");
+                Console.WriteLine(result.Count);
+            } 
+            return true;  
         }
+
+        static List<char> CheckFirstAndLast(List<char> input, Dictionary<string, char[]> p) 
+        {
+            bool isMatched = false;
+            foreach (var parentheses in p)
+            {
+                char[] value = parentheses.Value;
+                Console.WriteLine(input.Count);
+
+                if (value[0] == input[0])
+                {
+                    isMatched = value[1] == input[input.Count - 1] ? true : false;
+                    if (isMatched)
+                    {
+                        input.RemoveAt(0);
+                        input.RemoveAt(input.Count - 1);
+                    }
+                }
+                else continue;
+            }
+            Console.WriteLine($"Input length: {input.Count}, Is Matched: {isMatched}");
+            return input;
+        }  
     }
 }
 
