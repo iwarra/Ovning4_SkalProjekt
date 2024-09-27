@@ -189,70 +189,85 @@ namespace SkalProj_Datastrukturer_Minne
             return reversed;
         }
 
-        //ToDo: Refactor / Implement a better solution with a list / try solving with recursion 
+        //ToDo: Refactor / try solving with recursion?
         static bool CheckParanthesis()
         {
-            Dictionary<string, char[]> p = new Dictionary<string, char[]>
+            Parentheses curly = new Parentheses("curly", '{', '}');
+            Parentheses round = new Parentheses("round", '(', ')');
+            Parentheses square = new Parentheses("square", '[', ']');
+
+            //Adding all parentheses to a list
+            List<Parentheses> p = new List<Parentheses> 
             {
-                { "Round", new char[] {'(', ')'} },
-                { "Curly", new char[] {'{', '}'} },
-                { "Square", new char[] {'[', ']'} }
+                round,
+                curly,
+                square
             };
 
-            //Dictionary p = new Dictionary<string, char[]>
-            //{
-            //    { "Round", new char[] {'(', ')'}},
-            //    { "Curly", new char[] {'{', '}'}},
-            //    { "Square", new char[] {'[', ']'}}
-            //};
-            //check for null
+            //Get the input from the user
             string input = Console.ReadLine();
-            
             List<char> filtered = new List<char>();
 
-            foreach (char c in input)
+            //Filter out all other characters. Only parentheses left
+            foreach (var c in input)
             {
-                if (c == p["Round"][0] || c == p["Round"][1] || c == p["Curly"][0] || c == p["Curly"][1] || c == p["Square"][0] || c == p["Square"][1]) filtered.Add(c);
+                if (c == p[0].Opening || c == p[0].Closing ||  c == p[1].Opening || c == p[1].Closing || c == p[2].Opening || c == p[2].Closing) filtered.Add(c);
             }
 
+            //If there are no chars left or the number of chars left is odd return false
             if (filtered.Count == 0 || filtered.Count % 2 != 0)
             {
-                Console.WriteLine("Not a valid parentheses input");
+                Console.WriteLine("Not a valid parentheses input.");
                 return false;
             };
 
-            var result = CheckFirstAndLast(filtered, p);
+            List<char> result = filtered;
+
+            //While there are characters left to compare do the following 
             while (result.Count > 0)
             {
-                Console.WriteLine("In the while loop.");
-                CheckFirstAndLast(result, p);
-                Console.WriteLine($"Result of calling the func: { CheckFirstAndLast(result, p)}");
-                Console.WriteLine(result.Count);
-            } 
-            return true;  
+                //Access the returned values
+                var (updatedInput, isMatching) = CheckFirstAndLast(result, p);
+                result = updatedInput;
+
+                // If we got no match return false
+                if (!isMatching) {
+                    Console.WriteLine("Parentheses were not a match.");
+                    return false;
+                };
+            }
+            //Printing for my debugging purposes
+            Console.WriteLine("All parentheses were matched.");
+            return true; 
         }
 
-        static List<char> CheckFirstAndLast(List<char> input, Dictionary<string, char[]> p) 
+        //An extra method that checks the first and the last char and returns a Tuple 
+        static (List<char> Input, bool IsMatching) CheckFirstAndLast(List<char> input, List<Parentheses> p) 
         {
-            bool isMatched = false;
+           // int lastIndex = (input.Count - 1);
+            bool isMatching = false;
+
+            // A stop condition when all parentheses were matched
+            if (input.Count == 0) {
+                isMatching = true;
+                return (input, isMatching);
+            };
+
+            //Loop through all of our parentheses
             foreach (var parentheses in p)
             {
-                char[] value = parentheses.Value;
-                Console.WriteLine(input.Count);
-
-                if (value[0] == input[0])
+                //Check if the first and the last characters are a match and a valid pair
+                if (parentheses.Opening == input[0] && parentheses.Closing == input[input.Count - 1])
                 {
-                    isMatched = value[1] == input[input.Count - 1] ? true : false;
-                    if (isMatched)
-                    {
-                        input.RemoveAt(0);
-                        input.RemoveAt(input.Count - 1);
-                    }
+                    //Remove the first and the last char
+                    input.RemoveAt(0);
+                    input.RemoveAt(input.Count - 1);
+                    // Set isMatching to true and return it together with the edited input
+                    isMatching = true;
+                    return (input, isMatching);
                 }
-                else continue;
             }
-            Console.WriteLine($"Input length: {input.Count}, Is Matched: {isMatched}");
-            return input;
+            return (input, isMatching);
         }  
     }
 }
